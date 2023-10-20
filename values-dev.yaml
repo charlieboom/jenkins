@@ -1,6 +1,6 @@
 controller:
   JCasC:
-    defaultConfig: false
+    defaultConfig: true
     welcome-message: |
       jenkins:
         systemMessage: Welcome to our DEV CI\CD server.  This Jenkins is configured and managed 'as code' by Charlie Boom.
