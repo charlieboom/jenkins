@@ -9,7 +9,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /minikube_data/jenkins_data
+    path: /data/jenkins_data
     type: DirectoryOrCreate
 ---
 apiVersion: v1
@@ -20,7 +20,7 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 5Gi
+      storage: 1Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
