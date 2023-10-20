@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins-dev
+spec:
+  destination:
+    name: 'jenkins-dev'
+    namespace: jenkins
+    server: 'https://kubernetes.default.svc'
+  sources:
+    - chart: jenkins
+      path: ''
+      repoURL: 'https://charts.jenkins.io'
+      targetRevision: ''
+      helm:
+        valueFiles:
+          - $values/values-dev.yaml
+    - repoURL: 'https://github.com/charlieboom/jenkins'
+      targetRevision: HEAD
+      ref: values
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
