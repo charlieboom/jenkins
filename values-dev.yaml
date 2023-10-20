@@ -1,10 +1,182 @@
 controller:
   JCasC:
-    defaultConfig: true
+    defaultConfig: false
     welcome-message: |
       jenkins:
         systemMessage: Welcome to our DEV CI\CD server.  This Jenkins is configured and managed 'as code' by Charlie Boom.
-  serviceType: NodePort
+    jenkins: |
+      credentials:
+        system:
+          domainCredentials:
+          - credentials:
+            - certificate:
+                description: "followed instructions for minikube on kubernetes plugin page"
+                id: "minikube-cert"
+                keyStoreSource:
+                  uploaded:
+                    uploadedKeystore: "****"
+                password: "{AQAAABAAAAAQJj2hBaIjG4IBLJJMxCbEP/jq5k/pUj7L270my2+qWOY=}"
+                scope: GLOBAL
+      jenkins:
+        agentProtocols:
+        - "JNLP4-connect"
+        - "Ping"
+        authorizationStrategy:
+          loggedInUsersCanDoAnything:
+            allowAnonymousRead: false
+        clouds:
+        - kubernetes:
+            containerCap: 10
+            containerCapStr: "10"
+            jenkinsTunnel: "jenkins-dev-agent.jenkins.svc.cluster.local:50000"
+            jenkinsUrl: "http://jenkins-dev.jenkins.svc.cluster.local:8080"
+            name: "kubernetes"
+            namespace: "jenkins"
+            podLabels:
+            - key: "jenkins/jenkins-dev-jenkins-agent"
+              value: "true"
+            serverCertificate: |-
+              -----BEGIN CERTIFICATE-----
+              MIIDBjCCAe6gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
+              a3ViZUNBMB4XDTIzMDIxOTIyMzUyMVoXDTMzMDIxNzIyMzUyMVowFTETMBEGA1UE
+              AxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALfM
+              yTUQq1UVwivjD9JRvsP3g9avx0zPgWYCociz9vfjjW0kyAk/YjIwA+sHR8rzqUvC
+              /SogEIU3+lzyMoi3RmqmydkrUqlYdwg6bd1dCdXd8ioxGsPkC0N8J7hq/yqYD4Al
+              msaC6flPOqmcb3XXq+WAErKQENwmVwSWp+R87D2v4B/+DJKMwutnFcpVBUgngZj3
+              XqSDi/rW0EgPuvF1go74DJaOf0N3fSE8Jz14jVQpWtPuQ5n3pyPGt4gscTHazxBq
+              xfbJZ2uxQTqGkxX+KxtFtABheoKlUsu0IQWoWM9C+aCOzC4hyoM2LBrKV51Jsj35
+              FzOp3XDiuBpm4xjL8xUCAwEAAaNhMF8wDgYDVR0PAQH/BAQDAgKkMB0GA1UdJQQW
+              MBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQW
+              BBQ8jZTkpP87UV3cMnRX1ZCpWGI6kjANBgkqhkiG9w0BAQsFAAOCAQEAD+BG1815
+              NBSbag/dTC6H0055Z687hKoX9Hnzj5s3Eec7YCrxQGXEwJofcftgOtqowkWct6mf
+              TJkTmCM1NiJ9GGHlaeo33nBfp4eEuL5CwhJ2HwqrnaB4/g8WyPXLyV3A5gT2rl1P
+              hbu6UpZ6vDx8KZ2Xx/034i32++Zv9c5xuDVMkXJ+M0lx9gw3xH6LCisw7GaTdQpY
+              Md08g6Vp8boIYWDWHl2y2Rqv/p+iOd/i8zZ7I/uVtTcXnNodJ9KtSakeGXbj01Ru
+              a6deUWG6ZmMe6nyYXWMTCNhcOHKHXg62HbP9ZMJ89um653selmtVQ68hpflZWRDu
+              VLVzyHX3xkx7fg==
+              -----END CERTIFICATE-----
+            serverUrl: "https://kubernetes.default"
+            templates:
+            - containers:
+              - args: "^${computer.jnlpmac} ^${computer.name}"
+                command: "sleep"
+                envVars:
+                - envVar:
+                    key: "JENKINS_URL"
+                    value: "http://jenkins-dev.jenkins.svc.cluster.local:8080/"
+                image: "jenkins/inbound-agent:3107.v665000b_51092-15"
+                livenessProbe:
+                  failureThreshold: 0
+                  initialDelaySeconds: 0
+                  periodSeconds: 0
+                  successThreshold: 0
+                  timeoutSeconds: 0
+                name: "jnlp"
+                resourceLimitCpu: "512m"
+                resourceLimitMemory: "512Mi"
+                resourceRequestCpu: "512m"
+                resourceRequestMemory: "512Mi"
+                workingDir: "/home/jenkins/agent"
+              id: "a6e410bbc54d23e84ac3f58bd1608da0e09b1ef712ce19292fc4c1ee6c8add69"
+              label: "jenkins-dev-jenkins-agent"
+              name: "default"
+              namespace: "jenkins"
+              nodeUsageMode: NORMAL
+              podRetention: "never"
+              serviceAccount: "default"
+              slaveConnectTimeout: 100
+              slaveConnectTimeoutStr: "100"
+              yamlMergeStrategy: "override"
+        crumbIssuer:
+          standard:
+            excludeClientIPFromCrumb: true
+        disableRememberMe: false
+        labelAtoms:
+        - name: "built-in"
+        - name: "jenkins-dev-jenkins-agent"
+        markupFormatter: "plainText"
+        mode: NORMAL
+        myViewsTabBar: "standard"
+        numExecutors: 0
+        primaryView:
+          all:
+            name: "all"
+        projectNamingStrategy: "standard"
+        quietPeriod: 5
+        remotingSecurity:
+          enabled: true
+        scmCheckoutRetryCount: 0
+        securityRealm:
+          local:
+            allowsSignup: false
+            enableCaptcha: false
+            users:
+            - id: "admin"
+              name: "Jenkins Admin"
+              properties:
+              - "apiToken"
+              - "mailer"
+              - preferredProvider:
+                  providerId: "default"
+              - "experimentalFlags"
+        slaveAgentPort: 50000
+        updateCenter:
+          sites:
+          - id: "default"
+            url: "https://updates.jenkins.io/update-center.json"
+        views:
+        - all:
+            name: "all"
+        viewsTabBar: "standard"
+      globalCredentialsConfiguration:
+        configuration:
+          providerFilter: "none"
+          typeFilter: "none"
+      security:
+        apiToken:
+          creationOfLegacyTokenEnabled: false
+          tokenGenerationOnCreationEnabled: false
+          usageStatisticsEnabled: true
+        gitHooks:
+          allowedOnAgents: false
+          allowedOnController: false
+        gitHostKeyVerificationConfiguration:
+          sshHostKeyVerificationStrategy: "knownHostsFileVerificationStrategy"
+      unclassified:
+        buildDiscarders:
+          configuredBuildDiscarders:
+          - "jobBuildDiscarder"
+        fingerprints:
+          fingerprintCleanupDisabled: false
+          storage: "file"
+        location:
+          adminAddress: "address not configured yet <nobody@nowhere>"
+          url: "http://jenkins-dev:8080/"
+        mailer:
+          charset: "UTF-8"
+          useSsl: false
+          useTls: false
+        pollSCM:
+          pollingThreadCount: 10
+        prismConfiguration:
+          theme: PRISM
+        scmGit:
+          addGitTagAction: false
+          allowSecondFetch: false
+          createAccountBasedOnEmail: false
+          disableGitToolChooser: false
+          hideCredentials: false
+          showEntireCommitSummaryInChanges: false
+          useExistingAccountWithSameEmail: false
+      tool:
+        git:
+          installations:
+          - home: "git"
+            name: "Default"
+        mavenGlobalConfig:
+          globalSettingsProvider: "standard"
+          settingsProvider: "standard"
+        serviceType: NodePort
 persistence:
   enabled: true
   existingClaim: jenkins-pvc
