@@ -5,3 +5,6 @@ controller:
       jenkins:
         systemMessage: Welcome to our DEV CI\CD server.  This Jenkins is configured and managed 'as code' by Charlie Boom.
   serviceType: NodePort
+persistence:
+  enabled: true
+  existingClaim: jenkins-pvc
