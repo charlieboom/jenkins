@@ -176,7 +176,7 @@ controller:
         mavenGlobalConfig:
           globalSettingsProvider: "standard"
           settingsProvider: "standard"
-    serviceType: NodePort
+  serviceType: NodePort
 persistence:
   enabled: true
   existingClaim: jenkins-pvc
