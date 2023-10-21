@@ -3,13 +3,14 @@ kind: PersistentVolume
 metadata:
   name: jenkins-pv
 spec:
+  storageClassName: hostpath-storage
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /data/jenkins_data
+    path: /data/jenkins_home
     type: DirectoryOrCreate
 ---
 apiVersion: v1
@@ -22,6 +23,7 @@ spec:
     requests:
       storage: 1Gi
   volumeMode: Filesystem
+  storageClassName: hostpath-storage
   accessModes:
     - ReadWriteOnce
 
